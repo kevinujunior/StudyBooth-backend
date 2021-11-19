@@ -1,0 +1,1 @@
+web: gunicorn studybooth.wsgi --log-file -

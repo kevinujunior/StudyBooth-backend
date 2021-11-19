@@ -49,14 +49,14 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'corsheaders',
-    'channels',
+    # 'channels',
     
     #created apps
     'core',
     'students',
     'users',
     'feed',
-    'chat',
+    # 'chat',
 ]
 
 SITE_ID = 1
@@ -215,14 +215,14 @@ REST_USE_JWT = True
 # Channels
 ASGI_APPLICATION = 'studybooth.asgi.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 
 
 django_heroku.settings(locals())

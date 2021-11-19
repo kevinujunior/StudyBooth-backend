@@ -60,13 +60,15 @@ class PostListSerializer(serializers.ModelSerializer):
         return user_username
     
     def get_userPic(self,obj):
+        
         request = self.context.get('request')
-        photo_url = obj.user.userPic.url
-        if(request):
-            return request.build_absolute_uri(photo_url)
-        else:
-            return None
-    
+        if(obj.user.userPic):
+            photo_url = obj.user.userPic.url
+            if(request ):
+                return request.build_absolute_uri(photo_url)
+            else:
+                return None
+        return None
     
     def get_sectionName(self,obj):
         if(obj.postSection!=None):

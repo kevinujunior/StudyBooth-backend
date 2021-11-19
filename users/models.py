@@ -7,7 +7,7 @@ from django.db.models.fields import BLANK_CHOICE_DASH, NullBooleanField
 
 class User(AbstractUser):
     fullName = models.CharField(max_length=150)
-    userPic =  models.ImageField(upload_to='userPic/', null=True)
+    userPic =  models.ImageField(upload_to='userPic/', null=True, blank=True, default=None)
     userBio =  models.TextField(null=True,blank=True)
     # userPostCount = models.IntegerField(null = True,default=0)
     # userQuestionCount = models.IntegerField(null = True,default=0)

@@ -2,11 +2,13 @@ from django.shortcuts import render
 from users.serializers import ProfileSerializer
 from users.serializers import UserFollowingSerializer
 from users.serializers import UserSerializer, UserNotFollowingSerializer, UserFollowsSerializer
-from rest_framework import viewsets
+from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import  User, UserFollowing
 from django.db.models import Q
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import action
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -31,18 +33,40 @@ class UserFollowingViewSet(viewsets.ModelViewSet):
 
     serializer_class = UserFollowingSerializer
     queryset = UserFollowing.objects.all()
-    
+    # http_method_names = ['get']
     def get_queryset(self):
         queryset = UserFollowing.objects.all() 
         user = self.request.user
         if self.request.query_params.get("followingUser", None):
             followingUser = self.request.query_params.get("followingUser", None)
-            queryset = queryset.filter(currUser=user, followingUser = followingUser)
+            queryset = queryset.filter(currUser=user, followingUser = followingUser)  
+         
         return queryset
+    
+    
+    
+    
+    @action(detail=False, methods=['GET','DELETE'], name='unfollow')
+    def unfollow(self, request, pk=None):
+        user = self.request.user
+        if self.request.query_params.get("user", None):
+            followingUser = self.request.query_params.get("user", None) 
+            queryset = UserFollowing.objects.get(currUser=user, followingUser = followingUser)
+            self.perform_destroy(queryset)
+            return Response("deleted")
+        else:
+            return Response("Unfollow User")
+   
+       
+       
+            
         
     
 
-
+        
+        
+        
+        
 class ProfileViewSet(viewsets.ModelViewSet):
     # http_method_names = ['get']
     serializer_class = ProfileSerializer

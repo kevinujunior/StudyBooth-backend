@@ -18,7 +18,7 @@ def populate(N):
     for i in range(N):
         print("user=",i)
         add_user()
-    # for _ in range(50):
+    # for _ in range(2):
     #     add_user_following()
 
 

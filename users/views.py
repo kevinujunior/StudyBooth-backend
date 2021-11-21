@@ -9,6 +9,7 @@ from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -35,31 +36,44 @@ class UserFollowingViewSet(viewsets.ModelViewSet):
     queryset = UserFollowing.objects.all()
     # http_method_names = ['get']
     def get_queryset(self):
-        queryset = UserFollowing.objects.all() 
-        user = self.request.user
-        if self.request.query_params.get("followingUser", None):
-            followingUser = self.request.query_params.get("followingUser", None)
-            queryset = queryset.filter(currUser=user, followingUser = followingUser)  
-         
-        return queryset
+        try:
+            queryset = UserFollowing.objects.all() 
+            user = self.request.user
+            if self.request.query_params.get("followingUser", None):
+                followingUser = self.request.query_params.get("followingUser", None)
+                queryset = queryset.filter(currUser=user, followingUser = followingUser)  
+            return queryset
+        except:
+            return None
     
     
-    
-    
-    @action(detail=False, methods=['GET','DELETE'], name='unfollow')
-    def unfollow(self, request, pk=None):
-        user = self.request.user
-        if self.request.query_params.get("user", None):
-            followingUser = self.request.query_params.get("user", None) 
-            queryset = UserFollowing.objects.get(currUser=user, followingUser = followingUser)
-            self.perform_destroy(queryset)
-            return Response("deleted")
-        else:
-            return Response("Unfollow User")
+
+    # @action(detail=False, methods=['GET','DELETE'], name='unfollow')
+    # def unfollow(self, request, pk=None):
+    #     user = self.request.user
+    #     if self.request.query_params.get("user", None):
+    #         followingUser = self.request.query_params.get("user", None) 
+    #         queryset = UserFollowing.objects.get(currUser=user, followingUser = followingUser)
+    #         self.perform_destroy(queryset)
+    #         return Response("deleted")
+    #     else:
+    #         return Response("Unfollow User")
    
        
        
-            
+class UnfollowViewSet(viewsets.ModelViewSet):
+
+    serializer_class = UserFollowingSerializer
+    queryset = UserFollowing.objects.all()
+    # http_method_names = ['get']
+
+    def retrieve(self, request, pk=None):
+        queryset = UserFollowing.objects.all()
+        curr_user = self.request.user
+        user = get_object_or_404(queryset, followingUser=pk, currUser = curr_user)
+        serializer = UserFollowingSerializer(user)
+        return Response(serializer.data)
+        
         
     
 

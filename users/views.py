@@ -48,16 +48,16 @@ class UserFollowingViewSet(viewsets.ModelViewSet):
     
     
 
-    # @action(detail=False, methods=['GET','DELETE'], name='unfollow')
-    # def unfollow(self, request, pk=None):
-    #     user = self.request.user
-    #     if self.request.query_params.get("user", None):
-    #         followingUser = self.request.query_params.get("user", None) 
-    #         queryset = UserFollowing.objects.get(currUser=user, followingUser = followingUser)
-    #         self.perform_destroy(queryset)
-    #         return Response("deleted")
-    #     else:
-    #         return Response("Unfollow User")
+    @action(detail=False, methods=['GET'], name='unfollow')
+    def unfollow(self, request, pk=None):
+        user = self.request.user
+        if self.request.query_params.get("user", None):
+            followingUser = self.request.query_params.get("user", None) 
+            queryset = UserFollowing.objects.get(currUser=user, followingUser = followingUser)
+            self.perform_destroy(queryset)
+            return Response("deleted")
+        else:
+            return Response("Unfollow User")
    
        
        
@@ -70,6 +70,7 @@ class UnfollowViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = UserFollowing.objects.all()
         curr_user = self.request.user
+        print(curr_user)
         user = get_object_or_404(queryset, followingUser=pk, currUser = curr_user)
         serializer = UserFollowingSerializer(user)
         return Response(serializer.data)

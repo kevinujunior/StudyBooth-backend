@@ -191,37 +191,25 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = False
 
-# CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOWED_ORIGINS = [
-#     'http://localhost:8000',
-#     'http://localhost:3000',
-# ] # If this is used, then not need to use `CORS_ALLOW_ALL_ORIGINS = True`
-# CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ORIGIN_WHITELIST = [
-#     'http://127.0.0.1:8000',
-#     'http://localhost:3000',
-# ]
-# CORS_ALLOWED_ORIGIN_REGEXES = [
-#     'http://localhost:3030',
-#     'http://localhost:3000',
-# ]
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = True
 
-# REST_FRAMEWORK = {
-#     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-#     # 'PAGE_SIZE': 50,
-#    'DEFAULT_AUTHENTICATION_CLASSES': (
-# #    'rest_framework.authentication.TokenAuthentication',
-#    'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-#    )
+REST_FRAMEWORK = {
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 50,
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+
+   'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    #   'rest_framework.authentication.TokenAuthentication',
+   )
    
-# }
-
-
+}
 
 REST_USE_JWT = True
+
+
 # Channels
 ASGI_APPLICATION = 'studybooth.asgi.application'
 

@@ -5,7 +5,7 @@ from users.serializers import UserSerializer, UserNotFollowingSerializer, UserFo
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import  User, UserFollowing
-from django.db.models import Q
+from django.db.models import Q, query
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
@@ -62,20 +62,36 @@ class UserFollowingViewSet(viewsets.ModelViewSet):
        
        
 class UnfollowViewSet(viewsets.ModelViewSet):
-
+    permission_classes = [IsAuthenticated]
     serializer_class = UserFollowingSerializer
     queryset = UserFollowing.objects.all()
     # http_method_names = ['get']
-
+    def get_queryset(self):
+        try:
+            queryset = UserFollowing.objects.all() 
+            return queryset
+        except:
+            return None
+    
     def retrieve(self, request, pk=None):
         queryset = UserFollowing.objects.all()
         curr_user = self.request.user
-        print(curr_user)
         user = get_object_or_404(queryset, followingUser=pk, currUser = curr_user)
-        serializer = UserFollowingSerializer(user)
+        serializer = UserFollowingSerializer(user, many=False)
         return Response(serializer.data)
+    
+    def get_object(self):
+        queryset = self.get_queryset()
+        pk =  self.kwargs["pk"]
+        curr_user = self.request.user
+        obj = get_object_or_404(queryset, followingUser=pk,currUser=curr_user)
+        self.check_object_permissions(self.request, obj)
+        return obj
         
-        
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
 
         

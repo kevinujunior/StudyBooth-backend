@@ -12,6 +12,7 @@ class User(AbstractUser):
     # userPostCount = models.IntegerField(null = True,default=0)
     # userQuestionCount = models.IntegerField(null = True,default=0)
     # userAnswerCount = models.IntegerField(null=True,default=0)
+   
     
     
     
@@ -22,12 +23,11 @@ class UserFollowing(models.Model):
     
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['currUser','followingUser'],  name="unique_followers")
+            models.UniqueConstraint(fields=['currUser', 'followingUser'], name='unique followers')
         ]
-    ordering = ["-created"]
     
     def __str__(self):
-        return f"{self.user_id} follows {self.following_user_id}"
+        return f"{self.currUser} follows {self.followingUser}"
     
   
     

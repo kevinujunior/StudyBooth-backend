@@ -219,6 +219,8 @@ REST_FRAMEWORK = {
    
 }
 
+
+
 REST_USE_JWT = True
 # Channels
 ASGI_APPLICATION = 'studybooth.asgi.application'

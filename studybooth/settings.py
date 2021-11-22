@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'corsheaders',
+    'cloudinary',
     # 'channels',
     
     #created apps
@@ -73,6 +74,13 @@ MEDIA_URL = '/media/'
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static') ,'backend']
 VENV_PATH = os.path.dirname(BASE_DIR)
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'kevinujunior',
+    'API_KEY': '589174763974953',
+    'API_SECRET': 'nGEpHyMEn02b-Gkg9iG-hNAhqFk',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # MEDIA_ROOT =  None
 # MEDIA_URL = ""
@@ -201,15 +209,15 @@ ACCOUNT_EMAIL_REQUIRED = False
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = True
 
-REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE': 50,
-   'DEFAULT_AUTHENTICATION_CLASSES': (
-#    'rest_framework.authentication.TokenAuthentication',
-   'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-   )
+# REST_FRAMEWORK = {
+#     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     # 'PAGE_SIZE': 50,
+#    'DEFAULT_AUTHENTICATION_CLASSES': (
+# #    'rest_framework.authentication.TokenAuthentication',
+#    'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+#    )
    
-}
+# }
 
 REST_USE_JWT = True
 # Channels
@@ -226,3 +234,4 @@ ASGI_APPLICATION = 'studybooth.asgi.application'
 
 
 django_heroku.settings(locals())
+

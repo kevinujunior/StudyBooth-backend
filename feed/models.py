@@ -26,9 +26,22 @@ class Comment(models.Model):
     commentatorUser = models.ForeignKey("users.User", on_delete=CASCADE)
     commentText = models.TextField()
     createdAt = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+    
+    
+    def children(self):
+        return Comment.objects.filter(parent=self)
+
+    @property
+    def is_parent(self):
+        if self.parent is not None:
+            return False
+        return True
     
     def __str__(self) -> str:
-        self.commentText
+        return self.commentText
+        
+    
     
     
     

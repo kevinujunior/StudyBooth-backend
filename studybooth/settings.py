@@ -209,15 +209,15 @@ ACCOUNT_EMAIL_REQUIRED = False
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = True
 
-REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE': 50,
-   'DEFAULT_AUTHENTICATION_CLASSES': (
-#    'rest_framework.authentication.TokenAuthentication',
-   'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-   )
+# REST_FRAMEWORK = {
+#     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     # 'PAGE_SIZE': 50,
+#    'DEFAULT_AUTHENTICATION_CLASSES': (
+# #    'rest_framework.authentication.TokenAuthentication',
+#    'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+#    )
    
-}
+# }
 
 
 

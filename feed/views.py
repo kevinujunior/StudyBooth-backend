@@ -81,7 +81,7 @@ class CommentListViewSet(viewsets.ModelViewSet):
         # queryset = Post.objects.filter(
         #     Q(user__in= following.values_list('followingUser',flat = True)) | Q(user = curruser))
         
-        queryset = Comment.objects.all()
+        queryset = Comment.objects.filter(parent=None)
         if self.request.query_params.get("post", None):
             id = self.request.query_params.get("post", None)
             queryset = Comment.objects.filter(post__id = id)

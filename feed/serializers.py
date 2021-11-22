@@ -104,34 +104,40 @@ class CommentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Comment
-        fields = ['id','post', 'commentatorUser','commentText', 'createdAt']
+        fields = ['id','post', 'commentatorUser','commentText', 'createdAt', 'parent']
     
+
+class CommentChildSerializer(serializers.ModelSerializer):
+    parent_id = serializers.PrimaryKeyRelatedField(queryset=Comment.objects.all(),source='parent.id')
+    commentatorUser = CommentUserSerializer()
+    class Meta:
+        model = Comment
+        fields = ('id','parent_id', 'commentatorUser', 'commentText',)
+
+    def get_author(self, obj):
+        return obj.author.username
+
+    def create(self, validated_data):
+        subject = parent.objects.create(parent=validated_data['parent']['id'], commentText=validated_data['commentText'])
 
     
 
 
 class CommentListSerializer(serializers.ModelSerializer):
-    
-
     # userName =  serializers.SerializerMethodField(read_only = True)
     # userPic = serializers.SerializerMethodField(read_only = True)
     commentatorUser = CommentUserSerializer()
+    replies = serializers.SerializerMethodField()
     
     class Meta:
         model = Comment
-        fields = ['id','post', 'commentatorUser','commentText', 'createdAt',]
+        fields = ['id','post', 'commentatorUser','commentText', 'createdAt','replies']
     
-    
-    # def get_userName(self,obj):
-    #     user_username= obj.commentatorUser.username
-    #     return user_username
-    
-    # def get_userPic(self,obj):
-    #     request = self.context.get('request')
-    #     photo_url = obj.commentatorUser.userPic.url
-    #     return request.build_absolute_uri(photo_url)
-    
-    
+    def get_replies(self, obj):
+        if obj.is_parent:
+            return CommentChildSerializer(obj.children(), many=True).data
+        return None
+  
     
 
 class LikeSerializer(serializers.ModelSerializer):

@@ -112,7 +112,7 @@ class CommentChildSerializer(serializers.ModelSerializer):
     commentatorUser = CommentUserSerializer()
     class Meta:
         model = Comment
-        fields = ('id','parent_id', 'commentatorUser', 'commentText',)
+        fields = ('id','parent_id', 'commentatorUser', 'commentText','createdAt')
 
     def get_author(self, obj):
         return obj.author.username

@@ -41,7 +41,6 @@ class PostListViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     # http_method_names = ['get']
     # queryset = Post.objects.all()
-
     serializer_class = PostListSerializer
     def get_queryset(self):
     
@@ -86,8 +85,8 @@ class CommentListViewSet(viewsets.ModelViewSet):
         if self.request.query_params.get("post", None):
             id = self.request.query_params.get("post", None)
             queryset = queryset.filter(post__id = id, parent = None)
-            queryset = queryset.order_by("-createdAt")
-        queryset = queryset.order_by("-createdAt")
+            # queryset = queryset.order_by("-createdAt")
+        queryset = queryset.order_by("-createdAt" )
         return queryset
     
 

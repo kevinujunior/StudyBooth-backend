@@ -134,8 +134,9 @@ class CommentListSerializer(serializers.ModelSerializer):
         fields = ['id','post', 'commentatorUser','commentText', 'createdAt','replies']
     
     def get_replies(self, obj):
+        replies = obj.children().order_by('-createdAt')
         if obj.is_parent:
-            return CommentChildSerializer(obj.children(), many=True).data
+            return CommentChildSerializer(replies, many=True).data
         return None
   
     

@@ -197,8 +197,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE': 50,
+    # 'DEFAULT_PAGINATION_CLASS': 'feed.pagination.StandardResultsSetPagination',
    'DEFAULT_AUTHENTICATION_CLASSES': (
 
    'dj_rest_auth.jwt_auth.JWTCookieAuthentication',

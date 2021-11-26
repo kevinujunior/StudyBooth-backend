@@ -17,7 +17,7 @@ from .models import Post, Comment, Like, Section
 from users.models import User
 from django.db.models import Q
 from rest_framework.response import Response
-
+from .pagination import StandardResultsSetPagination
 
 class SectionViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
@@ -30,7 +30,7 @@ class SectionViewSet(viewsets.ModelViewSet):
     
 
 class PostViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # authentication_classes = (TokenAuthentication,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
@@ -38,10 +38,9 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class PostListViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    # http_method_names = ['get']
-    # queryset = Post.objects.all()
+    queryset = Post.objects.all()
     serializer_class = PostListSerializer
+    # pagination_class = StandardResultsSetPagination
     def get_queryset(self):
     
         queryset = Post.objects.all()

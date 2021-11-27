@@ -72,7 +72,7 @@ class CommentListViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     # http_method_names = ['get']
     serializer_class = CommentListSerializer
-    # pagination_class = StandardResultsSetPagination
+    pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
         # queryset = Post.objects.all()

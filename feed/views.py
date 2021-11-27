@@ -40,7 +40,7 @@ class PostViewSet(viewsets.ModelViewSet):
 class PostListViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostListSerializer
-    # pagination_class = StandardResultsSetPagination
+    pagination_class = StandardResultsSetPagination
     def get_queryset(self):
     
         queryset = Post.objects.all()
@@ -72,6 +72,7 @@ class CommentListViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     # http_method_names = ['get']
     serializer_class = CommentListSerializer
+    pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
         # queryset = Post.objects.all()
@@ -99,6 +100,7 @@ class LikeListViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     # http_method_names = ['get']
     serializer_class = LikeListSerializer
+    # pagination_class = StandardResultsSetPagination
     # queryset = Like.objects.all()
     def get_queryset(self):
         queryset = Like.objects.all()

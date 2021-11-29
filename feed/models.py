@@ -18,6 +18,11 @@ class Post(models.Model):
     def __str__(self) -> str:
         return self.postCaption
 
+    def commentCount(self):
+        return len(Comment.objects.filter(post=self))
+    
+    def likeCount(self):
+        return len(Like.objects.filter(post=self))
     
 
 
@@ -31,6 +36,8 @@ class Comment(models.Model):
     
     def children(self):
         return Comment.objects.filter(parent=self)
+    
+    
 
     @property
     def is_parent(self):

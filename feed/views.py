@@ -10,7 +10,7 @@ from feed.serializers import (
     LikeListSerializer)
 
 from users.serializers import UserSerializer
-from rest_framework import viewsets
+from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from .models import Post, Comment, Like, Section
@@ -75,12 +75,6 @@ class CommentListViewSet(viewsets.ModelViewSet):
     pagination_class = CommentResultsSetPagination
     
     def get_queryset(self):
-        # queryset = Post.objects.all()
-        # curruser = self.request.user
-        # following = UserFollowing.objects.filter(currUser = curruser)
-        # queryset = Post.objects.filter(
-        #     Q(user__in= following.values_list('followingUser',flat = True)) | Q(user = curruser))
-        
         queryset = Comment.objects.filter(parent=None)
         if self.request.query_params.get("post", None):
             id = self.request.query_params.get("post", None)
@@ -89,6 +83,25 @@ class CommentListViewSet(viewsets.ModelViewSet):
         queryset = queryset.order_by("-createdAt" )
         return queryset
     
+    @action(detail=False, methods=['GET'], name='replies')
+    def replies(self, request, pk=None):
+        queryset = Comment.objects.all()
+        if self.request.query_params.get("parent", None):
+            id = self.request.query_params.get("parent", None)
+            queryset = queryset.filter(parent__id = id )
+            print("here")
+        queryset = queryset.order_by("-createdAt" )
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+   
+    
+    
+
 
 class LikeViewSet(viewsets.ModelViewSet):
     # http_method_names = ['post','get']
@@ -97,11 +110,7 @@ class LikeViewSet(viewsets.ModelViewSet):
     
 
 class LikeListViewSet(viewsets.ModelViewSet):
-    # permission_classes = [IsAuthenticated]
-    # http_method_names = ['get']
     serializer_class = LikeListSerializer
-    # pagination_class = StandardResultsSetPagination
-    # queryset = Like.objects.all()
     def get_queryset(self):
         queryset = Like.objects.all()
        

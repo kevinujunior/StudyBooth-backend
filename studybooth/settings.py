@@ -196,15 +196,15 @@ ACCOUNT_EMAIL_REQUIRED = False
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = True
 
-REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'feed.pagination.StandardResultsSetPagination',
-   'DEFAULT_AUTHENTICATION_CLASSES': (
+# REST_FRAMEWORK = {
+#     # 'DEFAULT_PAGINATION_CLASS': 'feed.pagination.StandardResultsSetPagination',
+#    'DEFAULT_AUTHENTICATION_CLASSES': (
 
-   'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-    #   'rest_framework.authentication.TokenAuthentication',
-   )
+#    'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+#     #   'rest_framework.authentication.TokenAuthentication',
+#    )
    
-}
+# }
 
 REST_USE_JWT = True
 

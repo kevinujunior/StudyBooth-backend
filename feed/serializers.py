@@ -131,14 +131,15 @@ class CommentListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Comment
-        fields = ['id','post', 'commentatorUser','commentText', 'createdAt','replies']
+        fields = ['id','post','parent', 'commentatorUser','commentText', 'createdAt','replies']
     
     def get_replies(self, obj):
         replies = obj.children().order_by('-createdAt')
         if obj.is_parent:
             return CommentChildSerializer(replies, many=True).data
         return None
-  
+
+
     
 
 class LikeSerializer(serializers.ModelSerializer):

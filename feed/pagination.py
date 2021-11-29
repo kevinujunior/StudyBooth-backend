@@ -11,3 +11,9 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = 'page_size'
     max_page_size = 1000
+    
+    
+class CommentResultsSetPagination(PageNumberPagination):
+    page_size = 7
+    page_size_query_param = 'page_size'
+    max_page_size = 1000

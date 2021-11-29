@@ -128,11 +128,11 @@ class CommentListSerializer(serializers.ModelSerializer):
     # userPic = serializers.SerializerMethodField(read_only = True)
     commentatorUser = CommentUserSerializer()
     repliesCount = serializers.SerializerMethodField()
-    # parent = serializers.SerializerMethodField()
+    commentCount = serializers.SerializerMethodField()
     
     class Meta:
         model = Comment
-        fields = ['id','post','parent', 'commentatorUser','commentText', 'createdAt','repliesCount']
+        fields = ['id','post','parent', 'commentatorUser','commentText', 'createdAt','repliesCount', 'commentCount']
     
     
     # def get_parent(self,obj):
@@ -141,10 +141,17 @@ class CommentListSerializer(serializers.ModelSerializer):
     #     return obj.parent.id
     
     def get_repliesCount(self, obj):
-        replies = obj.children().order_by('-createdAt')
+        replies = obj.children()
         if obj.is_parent:
             return len(replies)
         return 0
+    
+    def get_commentCount(self, obj):
+        commentcount = Comment.objects.filter(post = obj.post.id)
+        return len(commentcount)
+        
+        
+        
 
 
     

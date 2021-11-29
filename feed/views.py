@@ -75,11 +75,11 @@ class CommentListViewSet(viewsets.ModelViewSet):
     pagination_class = CommentResultsSetPagination
     
     def get_queryset(self):
-        queryset = Comment.objects.all()
+        queryset = Comment.objects.filter(parent = None)
         if self.request.query_params.get("post", None):
             id = self.request.query_params.get("post", None)
             queryset = queryset.filter(post__id = id)
-        queryset = queryset.order_by("parent__id" , "-createdAt" )
+        queryset = queryset.order_by("-createdAt" )
         # queryset = queryset.order_by("commentText")
         return queryset
     

@@ -80,7 +80,7 @@ class CommentListViewSet(viewsets.ModelViewSet):
             id = self.request.query_params.get("post", None)
             queryset = queryset.filter(post__id = id)
             # queryset = queryset.order_by("-createdAt")
-        queryset = queryset.order_by("-createdAt" )
+        queryset = queryset.order_by("parent__id", "-createdAt" )
         return queryset
     
     @action(detail=False, methods=['GET'], name='replies')

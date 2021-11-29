@@ -75,7 +75,7 @@ class CommentListViewSet(viewsets.ModelViewSet):
     pagination_class = CommentResultsSetPagination
     
     def get_queryset(self):
-        queryset = Comment.objects.filter(parent=None)
+        queryset = Comment.objects.all()
         if self.request.query_params.get("post", None):
             id = self.request.query_params.get("post", None)
             queryset = queryset.filter(post__id = id)

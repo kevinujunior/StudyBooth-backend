@@ -92,7 +92,7 @@ class CommentListViewSet(viewsets.ModelViewSet):
             id = self.request.query_params.get("parent", None)
             queryset = queryset.filter(parent__id = id )
             print("here")
-        queryset = queryset.order_by("-createdAt" )
+        queryset = queryset.order_by("createdAt" )
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

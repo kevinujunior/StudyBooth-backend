@@ -3,7 +3,7 @@ from django.db import models
 from users.models import User
 
 class Message(models.Model):
-    author = models.ForeignKey(User, related_name='author_messages', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='author_messages', on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

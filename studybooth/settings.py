@@ -50,14 +50,14 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'corsheaders',
     'cloudinary',
-    # 'channels',
+    'channels',
     
     #created apps
     'core',
     'students',
     'users',
     'feed',
-    # 'chat',
+    'chat',
 ]
 
 SITE_ID = 1
@@ -72,6 +72,9 @@ MEDIA_URL = '/media/'
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # STATIC_URL = '/static/'
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static') ,'backend']
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 VENV_PATH = os.path.dirname(BASE_DIR)
 
 CLOUDINARY_STORAGE = {
@@ -220,6 +223,12 @@ ASGI_APPLICATION = 'studybooth.asgi.application'
 #         },
 #     },
 # }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 
 django_heroku.settings(locals())

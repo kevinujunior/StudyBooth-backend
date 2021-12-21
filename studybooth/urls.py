@@ -28,7 +28,7 @@ urlpatterns = [
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    # path('chat/', include('chat.urls')),
+    path('chat/', include('chat.urls')),
     # re_path(r'^(?:.*)/?$', TemplateView.as_view(template_name='index.html')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -24,8 +24,6 @@ router.register("create_like", LikeViewSet, basename="create-like-view")
 router.register("get_like", LikeListViewSet, basename="get-like-view")
 
 
-
-
 urlpatterns = [
     path("", include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

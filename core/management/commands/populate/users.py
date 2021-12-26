@@ -11,8 +11,9 @@ Faker.seed(999)
 def populate(N):
     bio = fake.text()
     pic = "/userPic/" + str(random.randint(1,3)) +".jpg"
-    user = User.objects.create_superuser(username='admin', password="admin", fullName="Rahul Dev",userPic=pic,userBio=bio)
-    # user = User.objects.create_superuser(username='9999999999', password="admin",  fullName="Raghav Shukla")
+    user = User.objects.create_superuser(username='admin', password="admin", fullName="Dabsay",userPic=pic,userBio=bio)
+    user = User.objects.create_superuser(username='kevin', password="admin",  fullName="Kevin")
+    user = User.objects.create_superuser(username='uditdabsay', password="admin",  fullName="Udit Dabsay")
     # for _ in range(2):
     #     add_superuser()
     for i in range(N):

@@ -3,12 +3,13 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
 from .models import Message
+from .models import PrivateChat
 
 
 class ChatConsumer(WebsocketConsumer):
 
     def fetch_messages(self, data):
-        messages = Message.last_10_messages()
+        messages = Message.objects.filter(chat=data['chatId']).order_by('-timestamp')
         content = {
             'command': 'messages',
             'messages': self.messages_to_json(messages)
@@ -16,10 +17,11 @@ class ChatConsumer(WebsocketConsumer):
         self.send_message(content)
 
     def new_message(self, data):
-        author = data['from']
-        author_user = User.objects.filter(username=author)[0]
+        user = data['from']
+        user = User.objects.filter(username=user)[0]
         message = Message.objects.create(
-            author=author_user, 
+            user=user, 
+            chat=PrivateChat.objects.get(id=data['chatId']),
             content=data['message'])
         content = {
             'command': 'new_message',
@@ -36,7 +38,7 @@ class ChatConsumer(WebsocketConsumer):
     def message_to_json(self, message):
         return {
             'id' : message.id,
-            'author': message.author.username,
+            'user': message.user.username,
             'content': message.content,
             'timestamp': str(message.timestamp)
         }

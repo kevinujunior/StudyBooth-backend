@@ -1,17 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import BLANK_CHOICE_DASH, NullBooleanField
-
+from django.db.models.fields import BLANK_CHOICE_DASH
 
 
 class User(AbstractUser):
     fullName = models.CharField(max_length=150)
     userPic =  models.ImageField(upload_to='userPic/', default=None)
     userBio =  models.TextField(null=True,blank=True)
-    # userPostCount = models.IntegerField(null = True,default=0)
-    # userQuestionCount = models.IntegerField(null = True,default=0)
-    # userAnswerCount = models.IntegerField(null=True,default=0)
+    # chats = models.ForeignKey(PrivateChat, null=True, blank=True, on_delete=models.CASCADE )
    
     
     

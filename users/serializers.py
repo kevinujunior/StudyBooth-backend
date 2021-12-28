@@ -1,10 +1,13 @@
 
+from chat.models import PrivateChat
 import feed.serializers as fs
 from rest_framework import serializers
 from django.db import transaction
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from .models import  User, UserFollowing
 from feed.models import Post
+from chat.serializers import ChatSerializer
+from django.db.models import Q
 # from .serializers import UserSerializer
 
 
@@ -54,9 +57,10 @@ class UserSerializer(serializers.ModelSerializer):
     followingCount = serializers.SerializerMethodField()
     followerCount= serializers.SerializerMethodField()
     postCount= serializers.SerializerMethodField()
+    chats = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'fullName', 'userPic','email','userBio','postCount','followingCount','followerCount']
+        fields = ['id', 'username', 'fullName', 'userPic','email','userBio','postCount','followingCount','followerCount','chats']
         
     def get_following(self, obj):
         return FollowingSerializer(obj.following.all(), many=True).data
@@ -75,12 +79,16 @@ class UserSerializer(serializers.ModelSerializer):
     def get_postCount(self,obj):
         posts = Post.objects.filter(user = obj)
         return len(posts)
+    
+    def get_chats(self,obj):
+        chats = PrivateChat.objects.filter(Q(user1 = obj) | Q(user2 = obj))
+        serializer = ChatSerializer(chats, many=True)
+        return serializer.data
         
 class UserFollowsSerializer(serializers.ModelSerializer):
     followingCount = serializers.SerializerMethodField()
     followerCount= serializers.SerializerMethodField()
     postCount= serializers.SerializerMethodField()
-    # viewUserPosts = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ['id', 'username', 'fullName', 'userPic','email','userBio','postCount','followingCount','followerCount',]

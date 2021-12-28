@@ -10,6 +10,10 @@ class PrivateChat(models.Model):
     user2 = models.ForeignKey(User,related_name='user2',null=True,blank=True, on_delete=models.CASCADE)
     def __str__(self):
         return "Chat "+"{}".format(self.pk)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user1', 'user2'], name='unique chat')
+        ]
     
 
 

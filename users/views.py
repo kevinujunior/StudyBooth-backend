@@ -1,9 +1,13 @@
 from django.shortcuts import render
+from chat.models import PrivateChat
+from chat.serializers import ChatSerializer
 from users.serializers import ProfileSerializer
 from users.serializers import UserFollowingSerializer
 from users.serializers import UserSerializer, UserNotFollowingSerializer, UserFollowsSerializer
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
+
+from users.serializers2 import UserChatSerializer
 from .models import  User, UserFollowing
 from django.db.models import Q, query
 from rest_framework.response import Response
@@ -26,7 +30,6 @@ class UserViewSet(viewsets.ModelViewSet):
             else:
                 return None
         return queryset
-    
     
     
 
@@ -138,3 +141,15 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
         serializer = ProfileSerializer(follow_users,many=True)
         return Response(serializer.data)
+    
+
+
+class UserChatsViewSet(viewsets.ModelViewSet):
+    serializer_class = ChatSerializer
+    queryset = PrivateChat.objects.all()
+    
+    def get_queryset(self):
+        curr_user = self.request.user
+        chats = PrivateChat.objects.filter(Q(author=curr_user) | Q(friend = curr_user))
+        return chats
+        

@@ -8,6 +8,7 @@ from users.views import (
    UserViewSet,
    UserFollowingViewSet,
     ProfileViewSet,
+    UserChatsViewSet
 )
 
 router = DefaultRouter()
@@ -15,6 +16,7 @@ router.register("userview", UserViewSet, basename="user-view")
 router.register("followingview", UserFollowingViewSet, basename="following-view")
 router.register("unfollow", UnfollowViewSet, basename="unfollow-view")
 router.register("profileview", ProfileViewSet, basename="profile-view")
+router.register("userchats", UserChatsViewSet, basename="user-chat-view")
 
 
 

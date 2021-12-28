@@ -2,6 +2,7 @@
 from django.core.checks import messages
 from django.db import models
 from users.models import User
+from django.db.models import Q
 
 
  
@@ -12,7 +13,7 @@ class PrivateChat(models.Model):
         return "Chat "+"{}".format(self.pk)
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['author', 'friend'], name='unique chat')
+            models.UniqueConstraint(fields=['author', 'friend'],  name='unique chat')
         ]
     
 

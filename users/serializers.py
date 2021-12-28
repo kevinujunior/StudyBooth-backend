@@ -55,10 +55,9 @@ class UserSerializer(serializers.ModelSerializer):
     followingCount = serializers.SerializerMethodField()
     followerCount= serializers.SerializerMethodField()
     postCount= serializers.SerializerMethodField()
-    chats = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'fullName', 'userPic','email','userBio','postCount','followingCount','followerCount', 'chats']
+        fields = ['id', 'username', 'fullName', 'userPic','email','userBio','postCount','followingCount','followerCount']
         
     def get_following(self, obj):
         return FollowingSerializer(obj.following.all(), many=True).data
@@ -77,11 +76,6 @@ class UserSerializer(serializers.ModelSerializer):
     def get_postCount(self,obj):
         posts = Post.objects.filter(user = obj)
         return len(posts)
-    
-    def get_chats(self,obj):
-        chats = PrivateChat.objects.filter(Q(user1 = obj) | Q(user2 = obj))
-        serializer = chat.ChatSerializer(chats, many=True)
-        return serializer.data
     
         
 class UserFollowsSerializer(serializers.ModelSerializer):

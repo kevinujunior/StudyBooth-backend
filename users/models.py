@@ -8,7 +8,6 @@ class User(AbstractUser):
     fullName = models.CharField(max_length=150)
     userPic =  models.ImageField(upload_to='userPic/', default=None)
     userBio =  models.TextField(null=True,blank=True)
-    # chats = models.ForeignKey(PrivateChat, null=True, blank=True, on_delete=models.CASCADE )
    
     
     

@@ -1,14 +1,12 @@
 
 from chat.models import PrivateChat
-import feed.serializers as fs
 from rest_framework import serializers
 from django.db import transaction
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from .models import  User, UserFollowing
 from feed.models import Post
-from chat.serializers import ChatSerializer
+import chat.serializers as chat
 from django.db.models import Q
-# from .serializers import UserSerializer
 
 
 #custom serializer for rest_auth 
@@ -60,7 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
     chats = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'fullName', 'userPic','email','userBio','postCount','followingCount','followerCount','chats']
+        fields = ['id', 'username', 'fullName', 'userPic','email','userBio','postCount','followingCount','followerCount', 'chats']
         
     def get_following(self, obj):
         return FollowingSerializer(obj.following.all(), many=True).data
@@ -82,8 +80,9 @@ class UserSerializer(serializers.ModelSerializer):
     
     def get_chats(self,obj):
         chats = PrivateChat.objects.filter(Q(user1 = obj) | Q(user2 = obj))
-        serializer = ChatSerializer(chats, many=True)
+        serializer = chat.ChatSerializer(chats, many=True)
         return serializer.data
+    
         
 class UserFollowsSerializer(serializers.ModelSerializer):
     followingCount = serializers.SerializerMethodField()
@@ -180,3 +179,5 @@ class ProfileSerializer(serializers.Serializer):
     
     def get_isFollowedByCurrUser(self,obj):
         return True
+    
+    

@@ -14,16 +14,16 @@ def get_user_contact(username):
 
 class PrivateChatViewSet(viewsets.ModelViewSet):
     serializer_class = ChatSerializer
-  
+    queryset = PrivateChat.objects.all()
     # pagination_class = StandardResultsSetPagination
 
-    def get_queryset(self):
-        queryset = PrivateChat.objects.all()
-        username = self.request.query_params.get('username', None)
-        if username is not None:
-            contact = get_user_contact(username)
-            queryset = contact.chats.all()
-        return queryset
+    # def get_queryset(self):
+    #     queryset = PrivateChat.objects.all()
+    #     username = self.request.query_params.get('username', None)
+    #     if username is not None:
+    #         contact = get_user_contact(username)
+    #         queryset = contact.chats.all()
+    #     return queryset
     
 
 class MessageViewSet(viewsets.ModelViewSet):

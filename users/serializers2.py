@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import  User
 
 class UserChatSerializer(serializers.Serializer):
+    id = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
     fullName = serializers.SerializerMethodField()
     userPic = serializers.SerializerMethodField()
@@ -13,6 +14,8 @@ class UserChatSerializer(serializers.Serializer):
         fields = ['id', 'username', 'fullName', 'userPic','email','userBio']    
     
     
+    def get_id(self,obj):
+        return obj.id
     def get_username(self,obj):
         return obj.username
     

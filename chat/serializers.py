@@ -19,4 +19,10 @@ class ChatSerializer(serializers.ModelSerializer):
         
 
         
+
+class CreateChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrivateChat
+        fields = ('__all__')
+          
         

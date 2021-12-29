@@ -42,6 +42,8 @@ from chat.views import (
 router = DefaultRouter()
 router.register("privatechat", PrivateChatViewSet, basename="private-chat-view")
 router.register("message", MessageViewSet, basename="message-view")
+# router.register("createchat", CreateChatViewSet, basename="create-chat-view")
+
 
 
 

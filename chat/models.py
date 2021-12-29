@@ -22,7 +22,7 @@ class PrivateChat(models.Model):
 
 class Message(models.Model):
     user = models.ForeignKey(User, related_name='message_user', on_delete=models.CASCADE,)
-    content = models.TextField()
+    content = models.TextField(null=False,blank=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     chat = models.ForeignKey(PrivateChat, related_name='chat', on_delete=models.CASCADE)
     def __str__(self):

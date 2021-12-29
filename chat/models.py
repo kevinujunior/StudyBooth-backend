@@ -11,6 +11,8 @@ class PrivateChat(models.Model):
     friend = models.ForeignKey(User,related_name='friend', on_delete=models.CASCADE)
     def __str__(self):
         return "Chat "+"{}".format(self.pk)
+    
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['author', 'friend'],  name='unique chat')

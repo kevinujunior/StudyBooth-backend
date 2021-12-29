@@ -199,15 +199,15 @@ ACCOUNT_EMAIL_REQUIRED = False
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = True
 
-REST_FRAMEWORK = {
-   'DEFAULT_AUTHENTICATION_CLASSES': (
+# REST_FRAMEWORK = {
+#    'DEFAULT_AUTHENTICATION_CLASSES': (
 
-   'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-   )
+#    'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+#    )
    
-}
+# }
 
-REST_USE_JWT = True
+# REST_USE_JWT = True
 
 
 # Channels

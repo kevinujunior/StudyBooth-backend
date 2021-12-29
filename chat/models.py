@@ -7,8 +7,8 @@ from django.db.models import Q
 
  
 class PrivateChat(models.Model):
-    author = models.ForeignKey(User,related_name='author', null=True,blank=True,on_delete=models.CASCADE,)
-    friend = models.ForeignKey(User,related_name='friend',null=True,blank=True, on_delete=models.CASCADE)
+    author = models.ForeignKey(User,related_name='author',on_delete=models.CASCADE,)
+    friend = models.ForeignKey(User,related_name='friend', on_delete=models.CASCADE)
     def __str__(self):
         return "Chat "+"{}".format(self.pk)
     class Meta:
@@ -19,10 +19,10 @@ class PrivateChat(models.Model):
 
 
 class Message(models.Model):
-    user = models.ForeignKey(User, related_name='message_user', on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, related_name='message_user', on_delete=models.CASCADE,)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    chat = models.ForeignKey(PrivateChat,null=True,blank=True, related_name='chat', on_delete=models.CASCADE)
+    chat = models.ForeignKey(PrivateChat, related_name='chat', on_delete=models.CASCADE)
     def __str__(self):
         return self.user.username + " : " + self.content
    

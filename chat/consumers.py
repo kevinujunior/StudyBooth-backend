@@ -9,7 +9,7 @@ from .models import PrivateChat
 class ChatConsumer(WebsocketConsumer):
 
     def fetch_messages(self, data):
-        messages = Message.objects.filter(chat=data['chatId']).order_by('-timestamp')
+        messages = Message.objects.filter(chat=data['chatId']).order_by('-timestamp')[:50]
         content = {
             'command': 'messages',
             'messages': self.messages_to_json(messages)

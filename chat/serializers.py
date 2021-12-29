@@ -1,6 +1,7 @@
 from django.core.checks import messages
+from django.http import request
 from rest_framework import serializers
-from chat.models import PrivateChat, Message
+from chat.models import GroupChat, GroupMember, GroupMessage, PrivateChat, Message
 from users.serializers2 import UserChatSerializer
 # from users.models import User
 from django.db.models import Q
@@ -28,21 +29,25 @@ class CreateChatSerializer(serializers.ModelSerializer):
         fields = ('id','author','friend')
         
 
+     
+
+class CreateGroupChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupChat
+        fields = ('id','name','description','groupPic')
    
+
+   
+class GroupMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupMember
+        fields = ('id','member','group','role')
         
-    # def save(self):
-    #     author = self.validated_data['author']
-    #     friend = self.validated_data['friend']
-    #     user = PrivateChat.objects.filter(Q(author= author, friend = friend) | Q(author=friend, friend = author))
-    #     if not user and (author!=friend):
-    #         return PrivateChat.objects.create(**self.validated_data)
-    #     else:
-    #         return Response({
-    #             'id': 'none',
-    #         'author' : 'none',
-    #         'friend' : 'none',
-    
-    #         })
-       
-          
+
+   
+class GroupMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupMessage
+        fields = ('id','user','content', 'chat', 'timestamp' )
         
+

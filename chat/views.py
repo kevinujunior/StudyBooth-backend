@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 from rest_framework import viewsets
-from chat.models import PrivateChat,Message
-from .serializers import ChatSerializer, MessageSerializer, CreateChatSerializer
+from chat.models import PrivateChat,Message,GroupChat,GroupMessage,GroupMember
+from .serializers import ChatSerializer, GroupMessageSerializer, MessageSerializer, CreateChatSerializer,CreateGroupChatSerializer, GroupMemberSerializer, GroupMessage
 User = get_user_model()
 from .pagination import StandardResultsSetPagination
 from rest_framework.response import Response
@@ -47,6 +47,44 @@ class MessageViewSet(viewsets.ModelViewSet):
     
 
 
+class GroupViewSet(viewsets.ModelViewSet):
+    serializer_class = CreateGroupChatSerializer
+    queryset = GroupChat.objects.all()
+    def create(self, request, format=None): 
+        serializer = CreateGroupChatSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            group = GroupChat.objects.get(id=serializer.data['id'])
+            GroupMember.objects.create(member=request.user, group = group, role="A")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+      
+
+class GroupMemberViewSet(viewsets.ModelViewSet):
+    serializer_class = GroupMemberSerializer
+    queryset = GroupMember.objects.all()
+    
+    
+class GroupMessageViewSet(viewsets.ModelViewSet):
+    serializer_class = GroupMessageSerializer
+    queryset = GroupMessage.objects.all()
+    
+    def create(self, request, format=None): 
+        serializer = GroupMessageSerializer(data=request.data)
+        member = request.data['user']
+        group = request.data['chat']
+        group_member = GroupMember.objects.filter(member = member, group =  group)
+        if group_member:
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({
+                'error': 'Invalid Request',
+            })
+      
+    
+   
 
 
 

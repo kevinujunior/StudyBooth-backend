@@ -37,14 +37,17 @@ from django.conf.urls.static import static
 from chat.views import (
    PrivateChatViewSet,
    MessageViewSet,
+   GroupViewSet,
+   GroupMemberViewSet,
+   GroupMessageViewSet,
 )
 
 router = DefaultRouter()
 router.register("privatechat", PrivateChatViewSet, basename="private-chat-view")
 router.register("message", MessageViewSet, basename="message-view")
-# router.register("createchat", CreateChatViewSet, basename="create-chat-view")
-
-
+router.register("groupchat", GroupViewSet, basename="group-chat-view")
+router.register("groupmember", GroupMemberViewSet, basename="group-member-view")
+router.register("groupmessage", GroupMessageViewSet, basename="group-message-view")
 
 
 

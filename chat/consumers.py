@@ -43,7 +43,7 @@ class ChatConsumer(WebsocketConsumer):
         message = GroupMessage.objects.create(
             user=user, 
             chat=GroupChat.objects.get(id=data['chatId']),
-            content=data['group_message'])
+            content=data['message'])
         content = {
             'command': 'new_group_message',
             'message': self.message_to_json(message)

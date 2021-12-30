@@ -88,7 +88,6 @@ class GroupChatSerializer(serializers.Serializer):
             user = request.user
             
         groupmember = GroupMember.objects.filter(member = user,group=obj)
-        print(groupmember)
         return GroupMemberSerializer(groupmember,many=True).data
         
     

@@ -2,7 +2,7 @@ from users.models import User
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
-from .models import Message
+from .models import GroupChat, Message, GroupMessage
 from .models import PrivateChat
 
 
@@ -28,6 +28,27 @@ class ChatConsumer(WebsocketConsumer):
             'message': self.message_to_json(message)
         }
         return self.send_chat_message(content)
+    
+    def fetch_group_messages(self, data):
+        messages = GroupMessage.objects.filter(chat=data['chatId']).order_by('-timestamp')[:30]
+        content = {
+            'command': 'messages',
+            'messages': self.messages_to_json(messages)
+        }
+        self.send_message(content)
+
+    def new_group_message(self, data):
+        user = data['from']
+        user = User.objects.filter(username=user)[0]
+        message = GroupMessage.objects.create(
+            user=user, 
+            chat=GroupChat.objects.get(id=data['chatId']),
+            content=data['group_message'])
+        content = {
+            'command': 'new_message',
+            'message': self.message_to_json(message)
+        }
+        return self.send_chat_message(content)
 
     def messages_to_json(self, messages):
         result = []
@@ -45,7 +66,9 @@ class ChatConsumer(WebsocketConsumer):
 
     commands = {
         'fetch_messages': fetch_messages,
-        'new_message': new_message
+        'new_message': new_message,
+        'fetch_group_messages' : fetch_group_messages,
+        'new_group_message' : new_group_message,
     }
 
     def connect(self):

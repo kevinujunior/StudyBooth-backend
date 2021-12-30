@@ -32,7 +32,7 @@ class ChatConsumer(WebsocketConsumer):
     def fetch_group_messages(self, data):
         messages = GroupMessage.objects.filter(chat=data['chatId']).order_by('-timestamp')[:30]
         content = {
-            'command': 'messages',
+            'command': 'group_messages',
             'messages': self.messages_to_json(messages)
         }
         self.send_message(content)
@@ -45,7 +45,7 @@ class ChatConsumer(WebsocketConsumer):
             chat=GroupChat.objects.get(id=data['chatId']),
             content=data['group_message'])
         content = {
-            'command': 'new_message',
+            'command': 'new_group_message',
             'message': self.message_to_json(message)
         }
         return self.send_chat_message(content)

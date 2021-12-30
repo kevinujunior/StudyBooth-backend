@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from chat.models import PrivateChat
-from chat.serializers import ChatSerializer
+from chat.models import GroupChat, GroupMember, PrivateChat
+from chat.serializers import ChatSerializer, CreateGroupChatSerializer, GroupChatSerializer
 from users.serializers import ProfileSerializer
 from users.serializers import UserFollowingSerializer
 from users.serializers import UserSerializer, UserNotFollowingSerializer, UserFollowsSerializer
@@ -153,3 +153,14 @@ class UserChatsViewSet(viewsets.ModelViewSet):
         chats = PrivateChat.objects.filter(Q(author=curr_user) | Q(friend = curr_user))
         return chats
         
+
+class UserGroupChatViewSet(viewsets.ModelViewSet):
+    serializer_class = GroupChatSerializer
+    queryset = GroupChat.objects.all()
+    
+    def get_queryset(self):
+        curr_user = self.request.user
+        groups = GroupMember.objects.filter(member = curr_user)
+        chats = GroupChat.objects.filter(group__in = groups)
+        return chats
+    

@@ -82,12 +82,8 @@ class GroupChatSerializer(serializers.Serializer):
                     return None
         
     def get_member(self,obj):
-        request = self.context.get('request', None)
-        user = None
-        if request:
-            user = request.user
-            
-        groupmember = GroupMember.objects.filter(member = user,group=obj)
+        
+        groupmember = GroupMember.objects.filter(group=obj)
         return GroupMemberSerializer(groupmember,many=True).data
         
     

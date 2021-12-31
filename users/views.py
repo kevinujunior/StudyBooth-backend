@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from chat.models import GroupChat, GroupMember, PrivateChat
-from chat.serializers import ChatSerializer, CreateGroupChatSerializer, GroupChatSerializer
+from chat.serializers import ChatSerializer,  GroupChatSerializer
 from users.serializers import ProfileSerializer
 from users.serializers import UserFollowingSerializer
 from users.serializers import UserSerializer, UserNotFollowingSerializer, UserFollowsSerializer
@@ -14,12 +14,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from django.db.models import Prefetch
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
-    # permission_classes = [IsAuthenticated]
-    # http_method_names = ['get']
-    # queryset = User.objects.all()
     serializer_class = UserSerializer
     def get_queryset(self):
         queryset = User.objects.all() 
@@ -37,7 +35,6 @@ class UserFollowingViewSet(viewsets.ModelViewSet):
 
     serializer_class = UserFollowingSerializer
     queryset = UserFollowing.objects.all()
-    # http_method_names = ['get']
     def get_queryset(self):
         try:
             queryset = UserFollowing.objects.all() 
@@ -148,18 +145,18 @@ class UserChatsViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         curr_user = self.request.user
-        chats = PrivateChat.objects.filter(Q(author=curr_user) | Q(friend = curr_user))
+        chats = PrivateChat.objects.filter(Q(author=curr_user) | Q(friend = curr_user)).order_by('-timestamp')
         return chats
         
 
 class UserGroupChatViewSet(viewsets.ModelViewSet):
     serializer_class = GroupChatSerializer
-    queryset = GroupChat.objects.all()
+ 
+    
     
     def get_queryset(self):
         curr_user = self.request.user
         groups = GroupMember.objects.filter(member = curr_user)
-        chats = GroupChat.objects.filter(group__in = groups)
-        # chats.order_by('member__member')
+        chats = GroupChat.objects.filter(group__in = groups).order_by('-timestamp')
         return chats
     

@@ -91,7 +91,6 @@ class CommentListViewSet(viewsets.ModelViewSet):
         if self.request.query_params.get("parent", None):
             id = self.request.query_params.get("parent", None)
             queryset = queryset.filter(parent__id = id )
-            print("here")
         queryset = queryset.order_by("createdAt" )
         page = self.paginate_queryset(queryset)
         if page is not None:

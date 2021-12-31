@@ -1,4 +1,5 @@
 from django.core.checks import messages
+from django.db.models.expressions import OrderBy
 from django.http import request
 from rest_framework import serializers
 from chat.models import GroupChat, GroupMember, GroupMessage, PrivateChat, Message
@@ -16,10 +17,21 @@ class MessageSerializer(serializers.ModelSerializer):
 class ChatSerializer(serializers.ModelSerializer):
     author = UserChatSerializer()
     friend = UserChatSerializer()
+    timestamp = serializers.SerializerMethodField()
     class Meta:
         model = PrivateChat
-        fields = ('id','author','friend')
-        
+        fields = ('id','author','friend', 'timestamp')
+    
+    def get_timestamp(self,obj):
+        messages = Message.objects.filter(chat=obj).order_by('-timestamp')
+        chat = PrivateChat.objects.get(id = obj.id)
+        timestamp = chat.timestamp
+        if messages:
+            timestamp = messages[0].timestamp
+            # print(timestamp)
+        PrivateChat.objects.filter(id = obj.id).update(timestamp= timestamp)
+        print(chat, " : " , chat.timestamp)
+        return timestamp  
 
         
 
@@ -50,6 +62,8 @@ class GroupMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupMessage
         fields = ('id','user','content', 'chat', 'timestamp' )
+    
+    
         
 
 
@@ -59,9 +73,11 @@ class GroupChatSerializer(serializers.Serializer):
     description = serializers.SerializerMethodField()
     groupPic = serializers.SerializerMethodField()
     member = serializers.SerializerMethodField() 
+    # messages =  serializers.SerializerMethodField() 
+    timestamp = serializers.SerializerMethodField()
     class Meta:
         model = GroupChat
-        fields = ('id','name','description','groupPic','member')
+        fields = ('id','name','description','groupPic','member', 'timestamp')
     
     def get_id(self,obj):
         return obj.id
@@ -86,4 +102,16 @@ class GroupChatSerializer(serializers.Serializer):
         groupmember = GroupMember.objects.filter(group=obj).order_by('role')
         return GroupMemberSerializer(groupmember,many=True).data
         
+
+    
+    def get_timestamp(self,obj):
+        groupmessages = GroupMessage.objects.filter(chat=obj).order_by('-timestamp')
+        group = GroupChat.objects.get(id = obj.id)
+        timestamp = group.timestamp
+        if groupmessages:
+            timestamp = groupmessages[0].timestamp
+            # print(timestamp)
+        GroupChat.objects.filter(id = obj.id).update(timestamp= timestamp)
+        print(group, " : " , group.timestamp)
+        return timestamp
     

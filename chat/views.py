@@ -68,7 +68,7 @@ class GroupMemberViewSet(viewsets.ModelViewSet):
 class GroupMessageViewSet(viewsets.ModelViewSet):
     serializer_class = GroupMessageSerializer
     queryset = GroupMessage.objects.all()
-    
+   
     def create(self, request, format=None): 
         serializer = GroupMessageSerializer(data=request.data)
         member = request.data['user']

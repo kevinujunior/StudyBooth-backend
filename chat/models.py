@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields import DecimalField, related
 from users.models import User
 
 
@@ -11,6 +12,7 @@ user_role_choices = (
 class PrivateChat(models.Model):
     author = models.ForeignKey(User,related_name='author',on_delete=models.CASCADE,)
     friend = models.ForeignKey(User,related_name='friend', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return "Chat "+"{}".format(self.pk)
     
@@ -35,6 +37,7 @@ class GroupChat(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200, null=True, blank=True)
     groupPic =  models.ImageField(upload_to='groupPic/', default=None, null=True, blank=True)
+    timestamp = models.DateTimeField (auto_now_add=True)
     def __str__(self):
         return self.name
 
@@ -59,4 +62,4 @@ class GroupMessage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     chat = models.ForeignKey(GroupChat, related_name='group_chat', on_delete=models.CASCADE)
     def __str__(self):
-        return self.user.username + " : " + self.content
+        return  self.chat.name + " : " + self.user.username + " : " + self.content

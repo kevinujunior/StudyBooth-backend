@@ -83,7 +83,7 @@ class GroupChatSerializer(serializers.Serializer):
         
     def get_member(self,obj):
         
-        groupmember = GroupMember.objects.filter(group=obj)
+        groupmember = GroupMember.objects.filter(group=obj).order_by('role')
         return GroupMemberSerializer(groupmember,many=True).data
         
     

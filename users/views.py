@@ -160,5 +160,6 @@ class UserGroupChatViewSet(viewsets.ModelViewSet):
         curr_user = self.request.user
         groups = GroupMember.objects.filter(member = curr_user)
         chats = GroupChat.objects.filter(group__in = groups)
+        # chats.order_by('member__member')
         return chats
     

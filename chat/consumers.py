@@ -23,6 +23,15 @@ class ChatConsumer(WebsocketConsumer):
             user=user, 
             chat=PrivateChat.objects.get(id=data['chatId']),
             content=data['message'])
+        chat=data['chatId']
+        messages = Message.objects.filter(chat=chat).order_by('-timestamp')
+        room = PrivateChat.objects.get(id = chat )
+        timestamp = room.timestamp
+        
+        if messages:
+            timestamp = messages[0].timestamp
+        PrivateChat.objects.filter(id = chat).update(timestamp= timestamp)
+    
         content = {
             'command': 'new_message',
             'message': self.message_to_json(message)
@@ -44,6 +53,14 @@ class ChatConsumer(WebsocketConsumer):
             user=user, 
             chat=GroupChat.objects.get(id=data['chatId']),
             content=data['message'])
+        chat=data['chatId']
+        messages = GroupMessage.objects.filter(chat=chat).order_by('-timestamp')
+        room = GroupChat.objects.get(id = chat )
+        timestamp = room.timestamp
+        
+        if messages:
+            timestamp = messages[0].timestamp
+        GroupChat.objects.filter(id = chat).update(timestamp= timestamp)
         content = {
             'command': 'new_group_message',
             'message': self.message_to_json(message)

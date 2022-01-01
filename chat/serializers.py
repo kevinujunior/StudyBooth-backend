@@ -15,6 +15,7 @@ class MessageSerializer(serializers.ModelSerializer):
     
     
     def create(self,validated_data): 
+        print("yo created")
         instance = Message.objects.create(**validated_data)
         chat=validated_data['chat'].id
         messages = Message.objects.filter(chat=chat).order_by('-timestamp')
@@ -40,16 +41,8 @@ class ChatSerializer(serializers.ModelSerializer):
         fields = ('id','author','friend', 'timestamp')
     
     def get_timestamp(self,obj):
-        messages = Message.objects.filter(chat=obj).order_by('-timestamp')
-        chat = PrivateChat.objects.get(id = obj.id)
-        timestamp = chat.timestamp
-        print(chat, " : " , chat.timestamp)
-        if messages:
-            timestamp = messages[0].timestamp
-            # print(timestamp)
-        # PrivateChat.objects.filter(id = obj.id).update(timestamp= timestamp)
-        print(chat, " : " , chat.timestamp)
-        return timestamp  
+        timestamp = obj.timestamp
+        return timestamp
 
         
 
@@ -135,13 +128,6 @@ class GroupChatSerializer(serializers.Serializer):
 
     
     def get_timestamp(self,obj):
-        groupmessages = GroupMessage.objects.filter(chat=obj).order_by('-timestamp')
-        group = GroupChat.objects.get(id = obj.id)
-        timestamp = group.timestamp
-        if groupmessages:
-            timestamp = groupmessages[0].timestamp
-            # print(timestamp)
-        # GroupChat.objects.filter(id = obj.id).update(timestamp= timestamp)
-        print(group, " : " , group.timestamp)
+        timestamp = obj.timestamp
         return timestamp
     

@@ -3,7 +3,7 @@ from django.db.models.expressions import OrderBy
 from django.http import request
 from rest_framework import serializers
 from chat.models import GroupChat, GroupMember, GroupMessage, PrivateChat, Message
-from users.serializers2 import UserChatSerializer
+from users.serializers2 import UserChatSerializer, UserGroupChatSerializer
 # from users.models import User
 from django.db.models import Q
 from rest_framework.response import Response
@@ -62,7 +62,7 @@ class CreateGroupChatSerializer(serializers.ModelSerializer):
 
    
 class GroupMemberSerializer(serializers.ModelSerializer):
-    # member = UserChatSerializer()
+    member = UserGroupChatSerializer()
     class Meta:
         model = GroupMember
         fields = ('id','member','group','role')
@@ -124,6 +124,12 @@ class GroupChatSerializer(serializers.Serializer):
         
         groupmember = GroupMember.objects.filter(group=obj).order_by('role')
         return GroupMemberSerializer(groupmember,many=True).data
+        
+    
+    # def get_member(self,obj):
+        
+    #     membername = GroupMember.objects.filter(group=obj).order_by('role')
+    #     return GroupMemberSerializer(groupmember,many=True).data
         
 
     

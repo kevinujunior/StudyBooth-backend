@@ -62,6 +62,12 @@ class CreateGroupChatSerializer(serializers.ModelSerializer):
 
    
 class GroupMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupMember
+        fields = ('id','member','group','role')
+
+
+class GroupMemberSerializer2(serializers.ModelSerializer):
     member = UserGroupChatSerializer()
     class Meta:
         model = GroupMember
@@ -123,15 +129,9 @@ class GroupChatSerializer(serializers.Serializer):
     def get_member(self,obj):
         
         groupmember = GroupMember.objects.filter(group=obj).order_by('role')
-        return GroupMemberSerializer(groupmember,many=True).data
+        return GroupMemberSerializer2(groupmember,many=True).data
         
     
-    # def get_member(self,obj):
-        
-    #     membername = GroupMember.objects.filter(group=obj).order_by('role')
-    #     return GroupMemberSerializer(groupmember,many=True).data
-        
-
     
     def get_timestamp(self,obj):
         timestamp = obj.timestamp

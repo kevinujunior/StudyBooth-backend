@@ -24,6 +24,7 @@ class UserChatSerializer(serializers.Serializer):
     
     def get_userPic(self, obj):
             request = self.context.get('request')
+            print(self.context)
             if self.context.get('request'):
                 if obj.userPic and hasattr(obj.userPic, 'url'):
                     photo_url = obj.userPic.url
@@ -52,20 +53,19 @@ class UserGroupChatSerializer(serializers.Serializer):
     def get_id(self,obj):
         return obj.id
     def get_username(self,obj):
+        print(self.context)
         return obj.username
     
     def get_fullName(self,obj):
         return obj.fullName
     
     def get_userPic(self, obj):
-            request = self.context.get('request')
-            if self.context.get('request'):
-                if obj.userPic and hasattr(obj.userPic, 'url'):
-                    photo_url = obj.userPic.url
-                    return request.build_absolute_uri(photo_url)
-            else:
-                    return None
-    
+        if obj.userPic and hasattr(obj.userPic, 'url'):
+            photo_url = obj.userPic.url
+            return photo_url
+        else:
+                return None
+
 
     
 

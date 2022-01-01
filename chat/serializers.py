@@ -11,7 +11,24 @@ from rest_framework.response import Response
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('__all__')
+        fields = ('id','content','timestamp','user','chat')
+    
+    
+    def create(self,validated_data): 
+        instance = Message.objects.create(**validated_data)
+        chat=validated_data['chat'].id
+        messages = Message.objects.filter(chat=chat).order_by('-timestamp')
+        room = PrivateChat.objects.get(id = chat)
+        timestamp = room.timestamp
+        
+        if messages:
+            timestamp = messages[0].timestamp
+        PrivateChat.objects.filter(id = chat).update(timestamp= timestamp)
+        return instance
+       
+    
+    
+    
         
 
 class ChatSerializer(serializers.ModelSerializer):
@@ -26,10 +43,11 @@ class ChatSerializer(serializers.ModelSerializer):
         messages = Message.objects.filter(chat=obj).order_by('-timestamp')
         chat = PrivateChat.objects.get(id = obj.id)
         timestamp = chat.timestamp
+        print(chat, " : " , chat.timestamp)
         if messages:
             timestamp = messages[0].timestamp
             # print(timestamp)
-        PrivateChat.objects.filter(id = obj.id).update(timestamp= timestamp)
+        # PrivateChat.objects.filter(id = obj.id).update(timestamp= timestamp)
         print(chat, " : " , chat.timestamp)
         return timestamp  
 
@@ -62,6 +80,18 @@ class GroupMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupMessage
         fields = ('id','user','content', 'chat', 'timestamp' )
+    
+    def create(self,validated_data): 
+        instance = GroupMessage.objects.create(**validated_data)
+        chat=validated_data['chat'].id
+        messages = GroupMessage.objects.filter(chat=chat).order_by('-timestamp')
+        room = GroupChat.objects.get(id = chat)
+        timestamp = room.timestamp
+        if messages:
+            timestamp = messages[0].timestamp
+        GroupChat.objects.filter(id = chat).update(timestamp= timestamp)
+        return instance
+       
     
     
         
@@ -111,7 +141,7 @@ class GroupChatSerializer(serializers.Serializer):
         if groupmessages:
             timestamp = groupmessages[0].timestamp
             # print(timestamp)
-        GroupChat.objects.filter(id = obj.id).update(timestamp= timestamp)
+        # GroupChat.objects.filter(id = obj.id).update(timestamp= timestamp)
         print(group, " : " , group.timestamp)
         return timestamp
     

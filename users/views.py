@@ -150,10 +150,7 @@ class UserChatsViewSet(viewsets.ModelViewSet):
         
 
 class UserGroupChatViewSet(viewsets.ModelViewSet):
-    serializer_class = GroupChatSerializer
- 
-    
-    
+    serializer_class = GroupChatSerializer    
     def get_queryset(self):
         curr_user = self.request.user
         groups = GroupMember.objects.filter(member = curr_user)

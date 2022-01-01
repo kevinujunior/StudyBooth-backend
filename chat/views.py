@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 from rest_framework import viewsets
 from chat.models import PrivateChat,Message,GroupChat,GroupMessage,GroupMember
-from .serializers import ChatSerializer, GroupMessageSerializer, MessageSerializer, CreateChatSerializer,CreateGroupChatSerializer, GroupMemberSerializer, GroupMessage
+from .serializers import ChatSerializer, GroupMemberSerializer2, GroupMessageSerializer, MessageSerializer, CreateChatSerializer,CreateGroupChatSerializer, GroupMemberSerializer, GroupMessage
 User = get_user_model()
 from .pagination import StandardResultsSetPagination
 from rest_framework.response import Response
@@ -63,6 +63,22 @@ class GroupViewSet(viewsets.ModelViewSet):
 class GroupMemberViewSet(viewsets.ModelViewSet):
     serializer_class = GroupMemberSerializer
     queryset = GroupMember.objects.all()
+    
+    def create(self, request, format=None): 
+        serializer = GroupMemberSerializer(data=request.data)
+        print(request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            print(serializer.data)
+            member = GroupMember.objects.get(id=serializer.data['id'])
+            serializer1 = GroupMemberSerializer2(member)
+            return Response(serializer1.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({
+                'error': 'Invalid Request',
+            })
+      
     
     
 class GroupMessageViewSet(viewsets.ModelViewSet):

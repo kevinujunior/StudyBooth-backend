@@ -6,7 +6,7 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 
 class User(AbstractUser):
     fullName = models.CharField(max_length=150)
-    userPic =  models.ImageField(upload_to='userPic/', default=None)
+    userPic =  models.FileField(upload_to='userPic/', default=None)
     userBio =  models.TextField(null=True,blank=True)
    
     

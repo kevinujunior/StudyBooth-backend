@@ -1,8 +1,9 @@
 import os
 import channels
 import django
-django.setup()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "studybooth.settings")
+django.setup()
+
 
 
 from channels.auth import AuthMiddlewareStack

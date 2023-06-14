@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from decouple import config
+import django_heroku
 import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,11 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+DEBUG = 'RENDER' not in os.environ
+ALLOWED_HOSTS = []
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 # Application definition
 
 INSTALLED_APPS = [
@@ -70,18 +76,14 @@ MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-# # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# # STATIC_URL = '/static/'
-# # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static') ,'backend']
-# STATIC_URL = 'static/'
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static') ,'backend']
+STATIC_URL = 'static/'
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # VENV_PATH = os.path.dirname(BASE_DIR)
-
-STATIC_URL = '/static/'
-
-# Following settings only make sense on production and may break development environments.
 if not DEBUG:
     # Tell Django to copy statics to the `staticfiles` directory
     # in your application directory on Render.
@@ -150,6 +152,15 @@ WSGI_APPLICATION = 'studybooth.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'TEST': {
+#             'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3')
+#         }
+#     }
+# }
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -158,6 +169,7 @@ DATABASES = {
         conn_max_age=600
     )
 }
+
 
 
 
@@ -243,3 +255,4 @@ CHANNEL_LAYERS = {
 }
 
 
+django_heroku.settings(locals())
